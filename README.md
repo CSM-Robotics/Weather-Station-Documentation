@@ -1,18 +1,28 @@
-Welcome to the CSM Weather Station Project!
+# Weather-Station
+This is the GitHub for the CSM Weather station project.
 
-For this project, we built a weather station that collects temperature, pressure, humidity, radiation, and air quality measurements and publishes them on a website for public consumption.  The project contains three main parts:
- - an Arduino-like microcontroller that collects the actual sensor information, and transmits it over a wireless protocol called LoRa
- - a Raspberry Pi running a Python script that recieves the LoRa data and sends it to an Amazon Web Services server
- - an AWS server written in Java that stores data long-term
- - a user interface that displays the data over time (language?)
+The goal for this weather station is to collect pressure/temperature/humidity/VOC/radiation measurements from an Arduino system, send it to a Raspberry Pi over LoRa, and publish that data somewhere in the cloud for other people to view.  Measurements will also be stored over time so that people can view graphs of the data.
 
-In this repository you will find several documents that give a high-level description of how the Weather Station project operates, geared towards people who know the basics of computer programming and might be doing maintenence on some part of the project.
+Here is the [link](https://docs.google.com/spreadsheets/d/1q3k0UVijBZFMGUKlG-Q5725P6HpbFjzFsUlXNikVg40/edit?usp=sharing) to the BOM (Bill of Materials) for everything.
 
-FAQ:
- - Why not send data from the Arduino directly?
- 	High power consumption (especially when using HTTPS), have to be in range of wireless network.
- - Why not host the server locally?
- 	Server maintenence is hard and we don't want to do it
- - Why not collect data with the Raspberry Pi directly?
-    We didn't plan for the weather station to be running off of wall power or be close to a Wi-Fi access point.  Running a POE line was possible but harder than doing everything wirelessly.
+## Safety information
+- The boards are assembled with leaded solder, I think.  Wash your hands after touching hardware.
+- If the VOC or Radiation measurements are way off, the sensors are probably broken.  Check the news before scaring yourself.
+
+## Arduino information
+The Arduino system uses multiple sensors to collect data, all of which are listed below.  For more detailed information check the Sparkfun "Getting Started" guides for the respective sensors.
+- The [BME280](https://www.sparkfun.com/products/13676) sensor is a combination pressure/temperature/humidity sensor. (3.3v **only**!!)
+- The [CCS811](https://www.sparkfun.com/products/14193) sensor measures air quality levels. (3.3v **only**!!)
+- The [Pocket Geiger Sensor](https://www.sparkfun.com/products/14209) measures beta and gamma radiation! (3.3v /  5v compatible)
+
+The CCS811 and BME280 sensors should be connected by I2C to the Pro RF.
+
+Additionally, the Arduino itself isn't just an Uno derivative.  It's actually a [Sparkfun Pro RF](https://www.sparkfun.com/products/14916), which is **only** 3.3v compatible and has a couple more features.
+The weather station also has a [Sunny Buddy](https://www.sparkfun.com/products/12885) for managing the solar panel and LiPo battery.
+
+## Raspberry Pi information
+The Raspberry Pi 4 uses an [RFM95W](https://www.adafruit.com/product/3072) in order to recieve data from the Arduino over LoRa.  It then sends data over WiFi to some kind of cloud server.
+
+## Cloud information
+See the "Weather-Station-Server" and "Weather-Station-UI" repositories.
 
