@@ -13,5 +13,6 @@ FAQ:
  	High power consumption (especially when using HTTPS), have to be in range of wireless network.
  - Why not host the server locally?
  	Server maintenence is hard and we don't want to do it
- - ...
+ - Why not collect data with the Raspberry Pi directly?
+    We didn't plan for the weather station to be running off of wall power or be close to a Wi-Fi access point.  Running a POE line was possible but harder than doing everything wirelessly.
 
