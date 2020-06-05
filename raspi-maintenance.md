@@ -19,18 +19,20 @@ Any commands that look like `this` are meant to be typed into a terminal.
     - `sudo pip3 install RPI.GPIO`
     - `sudo pip3 install adafruit-blinka`
     - `sudo pip3 install adafruit-circuitpython-rfm9x`
+        - make sure you install at least version 2.0.0 of the rfm9x library, since the python script we wrote uses reliable data transmission.
 5. Enable the proper SPI lines
     - This will allow the Raspberry Pi to communicate properly with the LoRa reciever.
     - Add the line `dtoverlay=spi1-3cs` to the bottom of /boot/config.txt and reboot
 6. Wire the RFM9X module
-    - Vin -> 3.3v
-    - GND -> GND
-    - RFM G0 -> GPIO #5
-    - RFM RST -> GPIO #25
-    - RFM CLK -> SCK
-    - RFM MISO -> MISO
-    - RFM MOSI -> MOSI
-    - RFM CS -> CE1
+    - Note that the LoRa module should be wired to the _second_ SPI bus.
+    - RFM Vin -> RasPi 3.3v
+    - RFM GND -> RasPi GND
+    - RFM G0 -> RasPi GPIO #5
+    - RFM RST -> RasPi GPIO #25
+    - RFM SCK -> RasPi SCK
+    - RFM MISO -> RasPi MISO
+    - RFM MOSI -> RasPi MOSI
+    - RFM CS -> RasPi CE1
 7. Test the script!
     - `cd ~/Desktop && git clone https://github.com/CSM-Robotics/Weather-Station`
     - `cd Weather-Station/RasPi`
