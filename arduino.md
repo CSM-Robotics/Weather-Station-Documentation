@@ -13,19 +13,16 @@ The Pro RF also communicates with a [radiation sensor](https://www.sparkfun.com/
 When the Pro RF first boots up, it initializes all three of these devices, as well as the onboard LoRa module.  If any of these devices fail to respond properly, the Pro RF will blink in a specific pattern indicating which device failed to respond: one blink means the atmospheric sensor failed to respond, two blinks mean the CCS sensor failed to respond, and three blinks means the radio module failed to respond.  The geiger sensor does not have the capability to report if it is broken or missing.
 
 After initializing the hardware, the Pro RF waits a predetermined number of seconds before reading each sensor and sending a packet containing the sensor data and several pieces of debug information:
- - the node ID (this is set to 1 at the moment.
-   - Setting up more than one weather station would require a decent amount of work. (32-bit unsigned int, or `uint32`)  
- - the temperature in deg C (`float`)
- - the pressure in Pascals (`float`)
- - the humidity in percent (`float`)
- - the amount of CO2 in the air in ppm (`float`)
- - the number of total volatile organic compounds in the air in ppb (`float`)
- - the counts per minute, which is a unit for measuring radiation (16-bit unsigned int, or `uint16` or `unsigned short`) 
- - a running total of the number of packets sent from the Arduino, which can be compared to the RasPi in order to determine if packets have been lost (32-bit unsigned int, or `uint32`)
- - an int representing error and device information (32-bit unsigned int, or `uint32`)
-   - TODO: list what all the error bits do
+ - the node ID (this field is currently unused).
+   - Setting up more than one weather station would require a decent amount of work. 
+ - the temperature in C
+ - the pressure in Pascals
+ - the humidity in percent
+ - the amount of CO2 in the air in ppm
+ - the number of total volatile organic compounds in the air in ppb
+ - the counts per minute, which is a unit for measuring radiation
+ - a running total of the number of packets sent from the Arduino, which can be compared to the RasPi in order to determine if packets have been lost
+ - an int representing error and device information
+   - If this field is not zero, an error occurred and the packet should not be used.
 
 The read-send-wait loop occurs forever, or until the microcontroller is reset.
-
-Weird tidbits:
- - The CCS sensor is calibrated using atmospheric data gathered from the BME sensor, which is pretty cool.
