@@ -1,17 +1,18 @@
-Welcome to the CSM Weather Station Project!
+# Weather Station Documentation
+The weather station we built is designed to collect pressure, temperature, humidity, VOC and radiation measurements from an Arduino system, send it to a Raspberry Pi over LoRa, and publish that data in the cloud for other people to view.  Measurements will also be stored over time so that people can view graphs of the data.  This document provides an overview of how the weather station is put together, and the arduino and raspi documents go into more depth about the code we wrote.  Finally, the raspi maintenance document explains how to set up the RasPi from scratch.
 
-For this project, we built a weather station that collects temperature, pressure, humidity, radiation, and air quality measurements and publishes them on a website for public consumption.  The project contains three main parts:
- - an Arduino-like microcontroller that collects the actual sensor information, and transmits it over a wireless protocol called LoRa
- - a Raspberry Pi running a Python script that recieves the LoRa data and sends it to an Amazon Web Services server
- - an AWS server written in Java that stores data long-term
- - a user interface that displays the data over time (language?)
+If you want to see the weather at CSM, [it's right here](https://csmrobotics.club/weatherStation.html).
 
-In this repository you will find several documents that give a high-level description of how the Weather Station project operates, geared towards people who know the basics of computer programming and might be doing maintenence on some part of the project.
+If you'd like an API for manipulating weather data, [we have that](https://api.csmrobotics.club/api/wss/getAll).
 
-FAQ:
- - Why not send data from the Arduino directly?
- 	High power consumption (especially when using HTTPS), have to be in range of wireless network.
- - Why not host the server locally?
- 	Server maintenence is hard and we don't want to do it
- - ...
+If you'd like to know the parts we used, [here you go](https://docs.google.com/spreadsheets/d/1h0GDfVYntyYW5QakYnAJw-5-3vuBXiLji0O7EjJ50Ls/edit#gid=0).
 
+## Safety information
+- The boards are assembled with leaded solder.  Wash your hands after touching hardware.
+- If the VOC or Radiation measurements are way off, the sensors are probably broken.  Check the news before scaring yourself.
+
+## Flow of data
+The flow of data from the Arduino to the API are listed below.
+1. The Arduino collects weather data from the sensors attached to it.  This data (and information reporting whether an error occurred while reading the sensors) is then sent immediately using the LoRa wireless protocol to the RasPi.
+2. The RasPi recieves the weather data from the LoRa reciever wired to it, and checks the format of the data to make sure it was not corrupted in transit.  Once the packet is deemed valid, it is converted to a JSON representation and sent to an AWS server for storage.
+3. The UI fetches data from the AWS server and presents it on our website.
